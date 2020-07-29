@@ -1,5 +1,6 @@
 from models.superpoint import SuperPoint
+from models.superglue import SuperGlue
 import torch
 
-superpoint = SuperPoint({})
-torch.jit.save(superpoint, 'SuperPoint.zip')
+torch.jit.save(SuperPoint({}), 'SuperPoint.zip')
+torch.jit.save(SuperGlue({'weights': 'outdoor'}), 'SuperGlue.zip')
