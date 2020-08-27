@@ -8,17 +8,18 @@
 
 #include "io.h"
 #include "viz.h"
+#include "superPoint.h"
 
 using namespace torch;
 using namespace torch::indexing;
 namespace fs = std::filesystem;
 
-std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> unpack_result(const IValue &result) {
-  auto dict = result.toGenericDict();
-  return {dict.at("keypoints").toTensorVector()[0], //
-          dict.at("scores").toTensorVector()[0],    //
-          dict.at("descriptors").toTensorVector()[0]};
-}
+/* std::tuple<torch::Tensor, torch::Tensor, torch::Tensor> unpack_result(const IValue &result) { */
+/*   auto dict = result.toGenericDict(); */
+/*   return {dict.at("keypoints").toTensorVector()[0], // */
+/*           dict.at("scores").toTensorVector()[0],    // */
+/*           dict.at("descriptors").toTensorVector()[0]}; */
+/* } */
 
 torch::Dict<std::string, Tensor> toTensorDict(const torch::IValue &value) {
   return c10::impl::toTypedDict<std::string, Tensor>(value.toGenericDict());
@@ -31,14 +32,16 @@ int main(int argc, const char *argv[]) {
     return 1;
   }
 
-  torch::manual_seed(1);
+
+  cv::SuperPoint();
+  /* torch::manual_seed(1); */
   torch::autograd::GradMode::set_enabled(false);
 
   torch::Device device(torch::kCPU);
-  if (torch::cuda::is_available()) {
-    std::cout << "CUDA is available! Training on GPU." << std::endl;
-    device = torch::Device(torch::kCUDA);
-  }
+  /* if (torch::cuda::is_available()) { */
+  /*   std::cout << "CUDA is available! Training on GPU." << std::endl; */
+  /*   device = torch::Device(torch::kCUDA); */
+  /* } */
 
   int target_width = std::stoi(argv[3]);
   Tensor image0 = read_image(std::string(argv[1]), target_width).to(device);
